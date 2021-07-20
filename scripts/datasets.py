@@ -6,31 +6,6 @@ from torchvision import transforms, datasets
 import numpy as np
 import os
 
-class CarvanaDataset(Dataset):
-    def __init__(self, image_dir, mask_dir, transform=None):
-        self.image_dir = image_dir
-        self.mask_dir = mask_dir 
-        self.transform = transform
-        self.images = os.listdir(self.image_dir)
-        self.masks = os.listdir(self.mask_dir)
-        
-    def __len__(self):
-        return len(self.images)
-
-    def __getitem__(self, index):
-        image_path = os.path.join(self.image_dir, self.images[index])
-        mask_path = os.path.join(self.mask_dir, self.masks[index])
-        image = np.array(Image.open(image_path).convert('RGB'))
-        mask = np.array(Image.open(mask_path).convert('L'), dtype=np.float32)
-        mask[mask == 255.0] = 1.0
-        
-        if self.transform is not None:
-            augmentations = self.transform(image=image, mask=mask)
-            image = augmentations['image']
-            mask = augmentations['mask']
-            
-        return image, mask
-
 class CityscapesDataset(Dataset):
     def __init__(self, split, root_dir, target_type='semantic', data=None, mode='fine', relabelled=False, transform=None, eval=False):
         self.transform = transform
@@ -45,18 +20,21 @@ class CityscapesDataset(Dataset):
         self.eval = eval
 
         if self.relabelled:
+            # This block of code is used to prepare a list of all labelTrainIds rgb and 
+            # ground truth images. Setting relabbelled=True is recommended. 
+
             self.label_path = os.path.join(os.getcwd(), root_dir+'/'+self.mode+'/'+self.split)
             self.rgb_path = os.path.join(os.getcwd(), root_dir+'/leftImg8bit/'+self.split)
             city_list = os.listdir(self.label_path)
             for city in city_list:
                 temp = os.listdir(self.label_path+'/'+city)
                 list_items = temp.copy()
-                #print("h", len(list_items))
+        
                 # 19-class label items being filtered
                 for item in temp:
                     if not item.endswith('labelTrainIds.png', 0, len(item)):
                         list_items.remove(item)
-                #print("k", len(list_items))
+
                 # defining paths
                 list_items = ['/'+city+'/'+path for path in list_items]
 
