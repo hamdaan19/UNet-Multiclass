@@ -14,12 +14,12 @@ else:
     DEVICE = "cpu"
     print('Running on the CPU')
 
-MODEL_PATH = 'unet_cityscapes_CE.pth.tar'
+MODEL_PATH = 'YOUR-MODEL-PATH'
 LOAD_MODEL = False
-ROOT_DIR = 'datasets/cityscapes'
-IMG_HEIGHT = 110
-IMG_WIDTH = 220
-BATCH_SIZE = 16
+ROOT_DIR = '../datasets/cityscapes'
+IMG_HEIGHT = 110  
+IMG_WIDTH = 220  
+BATCH_SIZE = 16 
 LEARNING_RATE = 0.0005
 EPOCHS = 5
 
@@ -42,12 +42,13 @@ def train_function(data, model, optimizer, loss_fn, device):
 
 def main():
     global epoch
-    epoch = 0
-    LOSS_VALS = []
+    epoch = 0 # epoch is initially assigned to 0. If LOAD_MODEL is true then
+              # epoch is set to the last value + 1. 
+    LOSS_VALS = [] # Defining a list to store loss values after every epoch
     
     transform = transforms.Compose([
         transforms.Resize((IMG_HEIGHT, IMG_WIDTH), interpolation=Image.NEAREST),
-    ])
+    ]) 
 
     train_set = get_cityscapes_data(
         split='train',
@@ -60,10 +61,12 @@ def main():
 
     print('Data Loaded Successfully!')
 
+    # Defining the model, optimizer and loss function
     unet = UNET(in_channels=3, classes=19).to(DEVICE).train()
     optimizer = optim.Adam(unet.parameters(), lr=LEARNING_RATE)
-    loss_function = nn.CrossEntropyLoss(ignore_index=255)
+    loss_function = nn.CrossEntropyLoss(ignore_index=255) 
 
+    # Loading a previous stored model from MODEL_PATH variable
     if LOAD_MODEL == True:
         checkpoint = torch.load(MODEL_PATH)
         unet.load_state_dict(checkpoint['model_state_dict'])
@@ -72,20 +75,9 @@ def main():
         LOSS_VALS = checkpoint['loss_values']
         print("Model successfully loaded!")    
 
+    #Training the model for every epoch. 
     for e in range(epoch, EPOCHS):
         print(f'Epoch: {e}')
-
-        #taking the initial value of loss
-        if e == 0:
-            for batch in train_set:
-                X, y = batch
-                X, y = X.to(DEVICE), y.to(DEVICE)
-                preds = unet(X)
-                loss = loss_function(preds, y)
-                LOSS_VALS.append(loss.item())
-                print("Initial loss value recorded.")
-                break
-
         loss_val = train_function(train_set, unet, optimizer, loss_function, DEVICE)
         LOSS_VALS.append(loss_val) 
         torch.save({
@@ -95,7 +87,6 @@ def main():
             'loss_values': LOSS_VALS
         }, MODEL_PATH)
         print("Epoch completed and model successfully saved!")
-
 
 
 if __name__ == '__main__':
