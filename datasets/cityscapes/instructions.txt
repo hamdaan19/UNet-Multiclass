@@ -1,2 +1,3 @@
 1. Note that 'cityscapes' is your root directory. 
 2. Keep 'gtFine', 'gtCoarse' and 'leftImg8bit' folders here. 
+3. Cityscapes dataset files can be downloaded from https://www.cityscapes-dataset.com/downloads/
