@@ -11,3 +11,5 @@ This repository contains code used to train U-Net on a multi-class segmentation 
 | 3. | [Pillow](https://pillow.readthedocs.io/en/stable/) | ```python3 -m pip install --upgrade Pillow``` |
 | 4. | [NumPy](https://numpy.org/) | ```pip install numpy``` | 
 | 5. | [CityscapesScripts](https://github.com/mcordts/cityscapesScripts) | ```python -m pip install cityscapesscripts``` |
+
+There are some other libraries that were also used such as Matplotlib(for visualization) and TQDM(to show the progress bar), but because they were only supplementary, I did not include them in the table above.  
