@@ -8,3 +8,6 @@ This repository contains code used to train U-Net on a multi-class segmentation 
 | --- | --- | --- |
 | 1. | [PyTorch](https://pytorch.org/) | Head on to PyTorch's official website and choose your OS, cuda version and other specifications and install. | 
 | 2. | [torchvision](https://pytorch.org/vision/stable/index.html) | ```pip install torchvision``` |
+| 3. | [Pillow](https://pillow.readthedocs.io/en/stable/) | ```python3 -m pip install --upgrade Pillow``` |
+| 4. | [NumPy](https://numpy.org/) | ```pip install numpy``` | 
+| 5. | [CityscapesScripts](https://github.com/mcordts/cityscapesScripts) | ```python -m pip install cityscapesscripts``` |
