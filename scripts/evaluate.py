@@ -50,7 +50,7 @@ def save_predictions(data, model):
             global location
             location = 'saved_images\multiclass_1'
 
-            utils.save_as_images(pred_labels, location, name, multiclass=True)                
+            utils.save_as_images(pred_labels, location, name)                
 
 def evaluate(path):
     T = transforms.Compose([
